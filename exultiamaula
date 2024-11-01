@@ -1,0 +1,206 @@
+/*Aluno: Matheus G. M. de Oliveira*/
+
+// bibliotecas necessarias
+#include <stdlib.h>
+#include <stdio.h>
+#include <conio.h>
+#include <windows.h>
+#include <locale.h>
+
+// função para posicionar o cursor
+void gotoxy(int x, int y)
+{
+	COORD coord;
+	coord.X = (short)x;
+	coord.Y = (short)y;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
+// construção da tela
+void tela()
+{
+	int lin;
+	int col;
+
+	// se a biblioteca correta não for delcarada o system cls não ira funcionar "stdlib. h". Sua função é limpar a tela de saída
+	system("cls");
+	// para definir a cor da tela
+	system("color 5");
+
+	// usando o gotoxy para posicionar corretamente os caracteres e formar uma tela mais xuxuzinha
+	for (lin = 1; lin < 25; lin++)
+	{
+		gotoxy(1, lin);
+		printf("|");
+		gotoxy(79, lin);
+		printf("|");
+	}
+
+	for (col = 1; col < 80; col++)
+	{
+		gotoxy(col, 1);
+		printf("-");
+		gotoxy(col, 4);
+		printf("-");
+		gotoxy(col, 22);
+		printf("-");
+		gotoxy(col, 24);
+		printf("-");
+	}
+
+	gotoxy(1, 1);
+	printf("+");
+	gotoxy(79, 1);
+	printf("+");
+
+	gotoxy(1, 4);
+	printf("+");
+	gotoxy(79, 4);
+	printf("+");
+
+	gotoxy(1, 22);
+	printf("+");
+	gotoxy(79, 22);
+	printf("+");
+
+	gotoxy(3, 2);
+	printf("UNICV");
+	gotoxy(60, 2);
+	printf("ESTRUTURA DE DADOS | ");
+	gotoxy(3, 3);
+	printf("SISTEMA DE CALCULO DE AREAS");
+	gotoxy(62, 3);
+	printf("Matheus Moreira  | ");
+	gotoxy(2, 23);
+	printf("MSG");
+}
+
+// estrutura de dados
+
+typedef struct
+{
+	int codigo;
+	float salario;
+	char nome[50];
+	char endereco[50];
+	char cargo[50];
+	char telefone[15];
+	char dt_admissao[11];
+} reg_funcionarios;
+
+// é um ponteiro
+typedef struct tipoItem *TipoApontador;
+
+typedef struct tipoItem
+{
+	reg_funcionarios conteudo;
+	TipoApontador proximo;
+} TipoItem;
+
+// uma estrutura com dois campos
+typedef struct
+{
+	TipoApontador primeiro;
+	TipoApontador ultimo;
+
+} Tipolista;
+
+// para cadastrar o funcionario
+void cadastra_funcionarios(Tipolista *l)
+{
+	TipoApontador P;
+	P = (TipoApontador)malloc(sizeof(TipoItem));
+	gotoxy(28, 05);
+	printf("Cadastrando funcionario\n");
+
+	gotoxy(32, 07);
+	printf("Codigo: ");
+	scanf("%d", &P->conteudo.codigo);
+
+	gotoxy(32, 9);
+	printf("Nome: ");
+	fflush(stdin);
+	gets(P->conteudo.nome);
+
+	gotoxy(32, 11);
+	printf("Endereco: ");
+	fflush(stdin);
+	gets(P->conteudo.endereco);
+
+	gotoxy(32, 13);
+	printf("Cargo: ");
+	fflush(stdin);
+	gets(P->conteudo.cargo);
+
+	gotoxy(32, 15);
+	printf("Data de admissao: ");
+	fflush(stdin);
+	gets(P->conteudo.dt_admissao);
+
+	gotoxy(32, 17);
+	printf("Telefone: ");
+	fflush(stdin);
+	gets(P->conteudo.telefone);
+
+	gotoxy(32, 19);
+	printf("Salario: ");
+	fflush(stdin);
+	scanf("%f", P->conteudo.salario);
+
+	// l vai receber o valor de p, ex se p aponta pra 10, l vai apontar pra 10
+	P->proximo = l->primeiro;
+	l->primeiro = P;
+	l->ultimo = P;
+}
+
+// programa principal
+int main()
+{
+	tela();
+	int opcao;
+	// CRIADO PARA NAO APONTAR PRA NADA
+	Tipolista l;
+	// inicializar a lista = atribuir null para os ponteiros primeiro e ultimo
+	l.primeiro = NULL;
+	l.ultimo = NULL;
+
+	do
+	{
+
+		gotoxy(32, 10);
+		printf("1 - Cadastrar funcionario ");
+		gotoxy(32, 12);
+		printf("2 - Consultar funcionarios: ");
+		gotoxy(32, 14);
+		printf("3 - Sair ");
+		gotoxy(32, 8);
+		printf("Digite a opcao: ");
+		scanf("%d", &opcao);
+
+		switch (opcao)
+		{
+		case 1:
+			system("cls");
+			tela();
+			cadastra_funcionarios(&l);
+			gotoxy(28, 10);
+			printf("Codigo.....:");
+			gotoxy(28, 10);
+			printf("Nome.......:");
+			gotoxy(28, 10);
+			printf("Telefone...:");
+			gotoxy(28, 10);
+			printf("Salario....:");
+			break;
+		case 2:
+			system("cls");
+			tela();
+		default:
+			getch();
+			break;
+		}
+
+	} while (opcao != 3);
+
+	return 0;
+}
